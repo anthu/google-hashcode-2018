@@ -1,0 +1,45 @@
+apply plugin: 'java'
+
+group = 'kata.seeds'
+jar.baseName = 'java-gradle-seed'
+archivesBaseName = 'java-gradle-seed'
+version = '0.1.0-SNAPSHOT'
+
+println "Using Java ${org.gradle.internal.jvm.Jvm.current()}"
+println "Using Gradle ${GradleVersion.current().getVersion()}"
+println "Building ${archivesBaseName}-${version}"
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    testCompile 'junit:junit:4.11'
+}
+
+test {
+  // show standard out and standard error of the test JVM(s) on the console
+  testLogging.showStandardStreams = true
+
+  // set heap size for the test JVM(s)
+  minHeapSize = '128m'
+  maxHeapSize = '512m'
+
+  // set JVM arguments for the test JVM(s)
+  jvmArgs '-XX:MaxPermSize=256m'
+
+  // listen to events in the test execution lifecycle
+  beforeTest { descriptor ->
+     logger.lifecycle('Running test: ' + descriptor)
+  }
+
+  // listen to standard out and standard error of the test JVM(s)
+  onOutput { descriptor, event ->
+     logger.lifecycle('Test: ' + descriptor + ' produced standard out/err: ' + event.message )
+  }
+}
+
+//http://www.gradle.org/docs/current/userguide/gradle_wrapper.html
+//generate gradlew with: gradle wrapper
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.1'
+}
