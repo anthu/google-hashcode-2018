@@ -5,6 +5,7 @@ import java.util.Arrays;
 public enum Cell {
     MUSHROOM("M"),
     TOMATO("T"),
+    OCCUPIED("X"),
     ;
     private final String name;
     Cell(String name) {

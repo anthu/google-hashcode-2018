@@ -34,7 +34,7 @@ public class FileReader {
         }
     }
 
-    public List<List<Cell>> getPizza() {
+    public Pizza getPizza() {
         List<List<Cell>> pizza = new ArrayList<>();
         boolean isFirstLine = true;
         for (String lineInFile : fileContent) {
@@ -48,7 +48,7 @@ public class FileReader {
                 isFirstLine = false;
             }
         }
-        return pizza;
+        return new Pizza(pizza);
     }
 
     public int getRowCount() {
