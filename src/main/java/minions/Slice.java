@@ -1,11 +1,29 @@
 package minions;
 
 public class Slice {
-    private Coordinate coordinate1;
-    private Coordinate coordinate2;
+    private Coordinate topLeft;
 
-    public Slice(Coordinate coordinate1, Coordinate coordinate2) {
-        this.coordinate1 = coordinate1;
-        this.coordinate2 = coordinate2;
+    public Coordinate getTopLeft() {
+        return topLeft;
     }
+
+    public void setTopLeft(Coordinate topLeft) {
+        this.topLeft = topLeft;
+    }
+
+    public Coordinate getBottomRight() {
+        return bottomRight;
+    }
+
+    public void setBottomRight(Coordinate bottomRight) {
+        this.bottomRight = bottomRight;
+    }
+
+    private Coordinate bottomRight;
+
+    public Slice(Coordinate topLeft, Coordinate bottomRight) {
+        this.topLeft = topLeft;
+        this.bottomRight = bottomRight;
+    }
+
 }
