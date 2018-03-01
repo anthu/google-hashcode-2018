@@ -3,7 +3,9 @@ package minions;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class FileReader {
     private List<Ride> rides = new ArrayList<>();
@@ -14,7 +16,6 @@ public class FileReader {
     private int ridesCount;
     private int bonusCount;
     private int numberOfSteps;
-
     FileReader(String path) {
         try {
             try (BufferedReader br = new BufferedReader(new java.io.FileReader(path))) {
@@ -31,7 +32,7 @@ public class FileReader {
 
                     int id = 0;
                     int skipped = 0;
-                    Car car = new Car();
+
                     while ((line = br.readLine()) != null) {
                         lineSplit = line.split(" ");
 
@@ -51,10 +52,8 @@ public class FileReader {
                             skipped++;
                         }
 
-                        car.addRide(ride);
+
                     }
-                    System.out.println("loaded rides: " + rides.size() + " Skipped: " + skipped);
-                    System.out.println(car.toString());
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -63,6 +62,103 @@ public class FileReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        List<Car> bestCars = getNextSortedSkipLate(rides);
+
+        for(Car car: bestCars) {
+            System.out.println(car.toString());
+        }
+
+    }
+
+    private List<Car> getSorted(List<Ride> rides) {
+        List<Car> bestCars = new ArrayList<>();
+        rides.sort(Comparator.comparing(Ride::getEarliestStart));
+        for (int j = 0; j < vehiclesCount ; j++) {
+            bestCars.add(new Car());
+        }
+        for(Ride ride : rides) {
+            Car avcar = bestCars.get(0);
+            for(Car car : bestCars) {
+                if(car.getTimeAfterLastRide() < avcar.getTimeAfterLastRide()) {
+                    avcar = car;
+                }
+            }
+            avcar.addRide(ride);
+        }
+        return bestCars;
+    }
+
+    private List<Car> getNextSorted(List<Ride> rides) {
+        List<Car> bestCars = new ArrayList<>();
+        rides.sort(Comparator.comparing(Ride::getEarliestStart));
+        for (int j = 0; j < vehiclesCount ; j++) {
+            bestCars.add(new Car());
+        }
+        for(Ride ride : rides) {
+            Car avcar = bestCars.get(0);
+            for(Car car : bestCars) {
+                if(getTimeTocome(avcar, ride) > getTimeTocome(car, ride)) {
+                    avcar = car;
+                }
+            }
+            avcar.addRide(ride);
+        }
+        return bestCars;
+    }
+
+    private List<Car> getNextSortedSkipLate(List<Ride> rides) {
+        List<Car> bestCars = new ArrayList<>();
+        rides.sort(Comparator.comparing(Ride::getEarliestStart));
+        for (int j = 0; j < vehiclesCount ; j++) {
+            bestCars.add(new Car());
+        }
+        for(Ride ride : rides) {
+            Car avcar = bestCars.get(0);
+            for(Car car : bestCars) {
+                if(getTimeTocome(avcar, ride) > getTimeTocome(car, ride)) {
+                    avcar = car;
+                }
+            }
+            if ((getTimeTocome(avcar,ride) + ride.getDuration() > ride.getLatestFinish()))
+            {
+                avcar.addRide(ride);
+            }
+        }
+        return bestCars;
+    }
+
+    private int getTimeTocome(Car car , Ride start) {
+        return Math.abs(car.getColumnPosition() - start.getColumnStart()) + Math.abs(car.getRowPosition() - start.getRowStart()) + car.getTimeAfterLastRide();
+    }
+
+    private List<Car> getRandom() {
+        int bestScore = 0;
+        List<Car> bestCars = new ArrayList<>();
+        for(int i = 0; i < 100000; i++) {
+            List<Car> cars = new ArrayList<>();
+            for (int j = 0; j < vehiclesCount ; j++) {
+                cars.add(new Car());
+            }
+
+            int score = 0;
+            for(Ride ride : rides) {
+                int radnd = ThreadLocalRandom.current().nextInt(0, vehiclesCount +1);
+                if (radnd < vehiclesCount) {
+                    cars.get(radnd).addRide(ride);
+                }
+            }
+            for(Car car : cars) {
+                score += car.score(bonusCount);
+            }
+            if(score > bestScore) {
+                System.out.println(score);
+                bestScore = score;
+                bestCars = cars;
+            }
+        }
+        System.out.println(bestScore);
+        return bestCars;
     }
 
     public List<Ride> getRides() {
