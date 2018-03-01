@@ -1,8 +1,11 @@
 package minions;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -65,10 +68,13 @@ public class FileReader {
 
         List<Car> bestCars = getNextSortedSkipLate(rides);
 
-        for(Car car: bestCars) {
-            System.out.println(car.toString());
+        try(PrintWriter br = new PrintWriter(new FileWriter("output/" + path.replace(".in", ".out")))) {
+            for(Car car: bestCars) {
+                br.write(car.toString() + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
 
     private List<Car> getSorted(List<Ride> rides) {
@@ -113,6 +119,9 @@ public class FileReader {
         for (int j = 0; j < vehiclesCount ; j++) {
             bestCars.add(new Car());
         }
+        int removed = 0;
+        int tmp = 0;
+
         for(Ride ride : rides) {
             Car avcar = bestCars.get(0);
             for(Car car : bestCars) {
@@ -120,13 +129,57 @@ public class FileReader {
                     avcar = car;
                 }
             }
-            if ((getTimeTocome(avcar,ride) + ride.getDuration() > ride.getLatestFinish()))
+            if ((getTimeTocome(avcar,ride) + ride.getDuration()) < ride.getLatestFinish())
             {
                 avcar.addRide(ride);
+                tmp = 0;
+            } else {
+                removed+=ride.getDuration();
+                tmp++;
             }
         }
+
         return bestCars;
     }
+
+    private List<Car> getNextSortedSkipLateWithMax(List<Ride> rides, int skipMax) {
+        List<Car> bestCars = new ArrayList<>();
+        rides.sort(Comparator.comparing(Ride::getEarliestStart));
+        List<Ride> ridesCopy = new ArrayList<>(rides);
+
+        boolean notFinished = true;
+        while (notFinished) {
+            int index = ThreadLocalRandom.current().nextInt(0, ridesCopy.size());
+            if(ridesCopy.get(index).getDuration() < skipMax) {
+                skipMax -= ridesCopy.get(index).getDuration();
+                ridesCopy.remove(index);
+            } else {
+                notFinished = false;
+            }
+        }
+
+        for (int j = 0; j < vehiclesCount ; j++) {
+            bestCars.add(new Car());
+        }
+        int removed = 0;
+        for(Ride ride : ridesCopy) {
+            Car avcar = bestCars.get(0);
+            for(Car car : bestCars) {
+                if(getTimeTocome(avcar, ride) > getTimeTocome(car, ride)) {
+                    avcar = car;
+                }
+            }
+            if ((getTimeTocome(avcar,ride) + ride.getDuration()) < ride.getLatestFinish())
+            {
+                avcar.addRide(ride);
+            } else {
+                removed++;
+            }
+        }
+        System.out.println("removed" + removed);
+        return bestCars;
+    }
+
 
     private int getTimeTocome(Car car , Ride start) {
         return Math.abs(car.getColumnPosition() - start.getColumnStart()) + Math.abs(car.getRowPosition() - start.getRowStart()) + car.getTimeAfterLastRide();

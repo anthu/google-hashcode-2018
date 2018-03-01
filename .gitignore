@@ -10,4 +10,5 @@ gradle-app.setting
 .idea/*
 .out/*
 out/*
+output/*
 *.zip
