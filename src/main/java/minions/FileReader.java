@@ -33,6 +33,7 @@ public class FileReader {
 
 
                     int id = 0;
+                    int skipped = 0;
                     while ((line = br.readLine()) != null) {
                         lineSplit = line.split(" ");
 
@@ -44,8 +45,16 @@ public class FileReader {
                         int latestFinish = Integer.valueOf(lineSplit[5]);
 
                         Ride ride = new Ride(id++, rowStart, columnStart, rowFinish, columnFinish, earliestStart, latestFinish);
-                        rides.add(ride);
+
+                        int diff = ride.getLatestFinish()-ride.getEarliestStart();
+                        if(ride.getDuration() <= diff) {
+                            rides.add(ride);
+                        } else {
+                            skipped++;
+                        }
+
                     }
+                    System.out.println("loaded rides: " + rides.size() + " Skipped: " + skipped);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
