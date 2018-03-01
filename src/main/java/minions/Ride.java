@@ -1,6 +1,7 @@
 package minions;
 
 public class Ride {
+    private final int id;
     private final int rowStart;
     private final int columnStart;
     private final int rowFinish;
@@ -8,7 +9,8 @@ public class Ride {
     private final int earliestStart;
     private final int latestFinish;
 
-    public Ride(int rowStart, int columnStart, int rowFinish, int columnFinish, int earliestStart, int latestFinish) {
+    public Ride(int id, int rowStart, int columnStart, int rowFinish, int columnFinish, int earliestStart, int latestFinish) {
+        this.id = id;
         this.rowStart = rowStart;
         this.columnStart = columnStart;
         this.rowFinish = rowFinish;
@@ -39,5 +41,13 @@ public class Ride {
 
     public int getLatestFinish() {
         return latestFinish;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getDuration() {
+        return Math.abs(rowStart - rowFinish) + Math.abs(columnFinish + columnStart);
     }
 }

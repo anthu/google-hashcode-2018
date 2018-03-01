@@ -1,5 +1,6 @@
 package minions;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FileReader {
-    private List<String> fileContent;
+    private List<Ride> rides = new ArrayList<>();
 
     private int rows;
     private int columns;
@@ -18,7 +19,6 @@ public class FileReader {
     private int numberOfSteps;
 
     FileReader(String path) {
-        fileContent = new ArrayList<>();
         try {
             try (BufferedReader br = new BufferedReader(new java.io.FileReader(path))) {
                 try {
@@ -43,8 +43,8 @@ public class FileReader {
                         int earliestStart = Integer.valueOf(lineSplit[4]);
                         int latestFinish = Integer.valueOf(lineSplit[5]);
 
-                        Ride ride = new Ride(rowStart, columnStart);
-
+                        Ride ride = new Ride(id++, rowStart, columnStart, rowFinish, columnFinish, earliestStart, latestFinish);
+                        rides.add(ride);
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -55,41 +55,31 @@ public class FileReader {
         }
     }
 
-    public Pizza getPizza() {
-        List<List<Cell>> pizza = new ArrayList<>();
-        boolean isFirstLine = true;
-        for (String lineInFile : fileContent) {
-            if (!isFirstLine) {
-                String[] cells = lineInFile.split("");
-                List<Cell> row = Arrays.stream(cells)
-                        .map(Cell::byName)
-                        .collect(Collectors.toList());
-                pizza.add(row);
-            } else {
-                isFirstLine = false;
-            }
-        }
-        return new Pizza(pizza);
+    public List<Ride> getRides() {
+        return rides;
     }
 
-    public int getRowCount() {
-        return getConfigByIndex(CONFIG_ROW_ROW_COUNT_INDEX);
+    public int getRows() {
+        return rows;
     }
 
-
-    public int getColumnCount() {
-        return getConfigByIndex(CONFIG_ROW_COLUMN_COUNT_INDEX);
+    public int getColumns() {
+        return columns;
     }
 
-    public int getMinimumIngredientsCount() {
-        return getConfigByIndex(CONFIG_ROW_MINIMUM_INDEX);
+    public int getVehiclesCount() {
+        return vehiclesCount;
     }
 
-    public int getMaxSize() {
-        return getConfigByIndex(CONFIG_ROW_MAX_SIZE_INDEX);
+    public int getRidesCount() {
+        return ridesCount;
     }
 
-    private Integer getConfigByIndex(int index) {
-        return Integer.valueOf(fileContent.get(CONFIG_ROW_INDEX).split(" ")[index]);
+    public int getBonusCount() {
+        return bonusCount;
+    }
+
+    public int getNumberOfSteps() {
+        return numberOfSteps;
     }
 }

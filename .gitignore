@@ -7,4 +7,4 @@ gradle-app.setting
 #ignore groovyConsole logs when testing functions
 *.log
 *.iml
-.idea
+.idea/*
