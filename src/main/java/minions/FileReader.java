@@ -1,12 +1,9 @@
 package minions;
 
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FileReader {
     private List<Ride> rides = new ArrayList<>();
@@ -34,6 +31,7 @@ public class FileReader {
 
                     int id = 0;
                     int skipped = 0;
+                    Car car = new Car();
                     while ((line = br.readLine()) != null) {
                         lineSplit = line.split(" ");
 
@@ -53,8 +51,11 @@ public class FileReader {
                             skipped++;
                         }
 
+                        car.addRide(ride);
                     }
                     System.out.println("loaded rides: " + rides.size() + " Skipped: " + skipped);
+                    System.out.println(car.toString());
+
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

@@ -67,4 +67,20 @@ public class Car {
     private boolean second(Ride current) {
         return (current.getEarliestStart() == this.currentTime);
     }
+
+
+
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(rides.size());
+        sb.append(" ");
+
+        for(Ride ride : rides) {
+            sb.append(ride.getId());
+            sb.append(" ");
+        }
+        return sb.toString().trim();
+    }
+
 }

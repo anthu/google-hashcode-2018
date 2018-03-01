@@ -7,13 +7,5 @@ public class Main {
         FileReader fileReader = new FileReader("e_high_bonus.in");
 
         List<Ride> rides = fileReader.getRides();
-
-
-
-
-        //opt. start
-
-        rides
-
     }
 }
