@@ -46,4 +46,8 @@ public class Ride {
     public int getId() {
         return id;
     }
+
+    public int getDuration() {
+        return Math.abs(rowStart - rowFinish) + Math.abs(columnFinish + columnStart);
+    }
 }
