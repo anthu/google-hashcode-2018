@@ -8,5 +8,12 @@ public class Main {
 
         List<Ride> rides = fileReader.getRides();
 
+
+
+
+        //opt. start
+
+        rides
+
     }
 }

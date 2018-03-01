@@ -48,6 +48,6 @@ public class Ride {
     }
 
     public int getDuration() {
-        return Math.abs(rowStart - rowFinish) + Math.abs(columnFinish + columnStart);
+        return Math.abs(rowStart - rowFinish) + Math.abs(columnFinish - columnStart);
     }
 }
