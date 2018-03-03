@@ -8,7 +8,6 @@ gradle-app.setting
 *.log
 *.iml
 .idea/*
-.out/*
 out/*
 output/*
 *.zip
