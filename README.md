@@ -36,7 +36,7 @@ So For the last two hours we went full into the optimization of the second appro
 
 -> we were unable to implement this one in time (post-competition contribution coming)
 
-Our end score were `45,820,365` as a result of different 
+Our end score were `45,820,365` as a result of all the intermediate results 
 ## The Team
 - [samy1990](https://github.com/samy1990)
 - [DavidEibl](https://github.com/DavidEibl)
