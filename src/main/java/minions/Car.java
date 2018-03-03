@@ -10,16 +10,33 @@ public class Car {
     private int timeAfterLastRide = 0;
     private int columnPosition = 0;
     private int rowPosition = 0;
-    private int currentTime = 0;
     private int currentScore = 0;
+    private int bonus;
+
+    public Car(int bonus) {
+        this.bonus = bonus;
+    }
 
     public void addRide(Ride ride){
         int timeToStart = Math.abs(columnPosition - ride.getColumnStart()) + Math.abs(rowPosition - ride.getRowStart());
-        int timeAtStartPositionArrived = timeAfterLastRide + timeToStart;
-        int startTime = timeAtStartPositionArrived >= ride.getEarliestStart() ? timeAtStartPositionArrived : ride.getEarliestStart();
+        int startTime = timeAfterLastRide + timeToStart;
+
+        // wait for start and receive bonus
+        if (startTime <= ride.getEarliestStart()) {
+            startTime = ride.getEarliestStart();
+            this.currentScore += this.bonus;
+        }
+
         timeAfterLastRide = startTime + ride.getDuration();
+
+        // receive points for in-time delivery
+        if(timeAfterLastRide < ride.getLatestFinish()) {
+            this.currentScore += ride.getDuration();
+        }
+
         columnPosition = ride.getColumnFinish();
         rowPosition = ride.getRowFinish();
+
         rides.add(ride);
     }
 
@@ -38,41 +55,10 @@ public class Car {
     public int getRowPosition() {
         return rowPosition;
     }
-    public int score(int b) {
-        currentTime = 0;
-        currentScore = 0;
-        Ride previousRide = new Ride(0,0,0,0,-1,-1, -1);
-        for (Ride ride : this.rides) {
-            if (second(previousRide,ride)) {
-                currentScore += b;
-            }
-            if(firstTrue(previousRide,ride)) {
-                currentScore += ride.getDuration();
-            }
-        }
+
+    public int getCurrentScore() {
         return currentScore;
     }
-
-    private boolean firstTrue(Ride previous, Ride current) {
-        int arTime = getArrival(previous, current);
-
-        int start = (arTime <= current.getEarliestStart()) ? current.getEarliestStart() : arTime;
-
-        this.currentTime = (start + current.getDuration());
-        return this.currentTime <= current.getLatestFinish();
-    }
-
-    private int getArrival(Ride prev, Ride cur) {
-        return Math.abs(prev.getRowFinish() - cur.getRowStart()) + Math.abs(prev.getColumnFinish() - cur.getRowStart()) + currentTime;
-    }
-
-    private boolean second(Ride prev, Ride current) {
-        int arTime = getArrival(prev, current);
-        return (current.getEarliestStart() <= arTime);
-    }
-
-
-
 
     public String toString() {
         StringBuilder sb = new StringBuilder();

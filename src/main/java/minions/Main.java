@@ -9,5 +9,6 @@ public class Main {
         new FileReader("input/c_no_hurry.in");
         new FileReader("input/d_metropolis.in");
         new FileReader("input/e_high_bonus.in");
+        System.out.println(FileReader.overallScore);
     }
 }

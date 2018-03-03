@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class FileReader {
     private List<Ride> rides = new ArrayList<>();
-
+    public static int overallScore = 0;
     private int rows;
     private int columns;
     private int vehiclesCount;
@@ -64,9 +64,13 @@ public class FileReader {
         try(
                 PrintWriter br = new PrintWriter(new FileWriter("output/" + f.getName().replace(".in", ".out")))
         ) {
+            int totalScore = 0;
             for(Car car: bestCars) {
                 br.write(car.toString() + "\n");
+                totalScore += car.getCurrentScore();
             }
+            System.out.println(f.getName() + ": " + totalScore);
+            overallScore += totalScore;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,7 +80,7 @@ public class FileReader {
         List<Car> bestCars = new ArrayList<>();
         rides.sort(Comparator.comparing(Ride::getEarliestStart));
         for (int j = 0; j < vehiclesCount ; j++) {
-            bestCars.add(new Car());
+            bestCars.add(new Car(bonusCount));
         }
         for(Ride ride : rides) {
             Car avcar = bestCars.get(0);
@@ -94,7 +98,7 @@ public class FileReader {
         List<Car> bestCars = new ArrayList<>();
         rides.sort(Comparator.comparing(Ride::getEarliestStart));
         for (int j = 0; j < vehiclesCount ; j++) {
-            bestCars.add(new Car());
+            bestCars.add(new Car(bonusCount));
         }
         for(Ride ride : rides) {
             Car avcar = bestCars.get(0);
@@ -110,9 +114,10 @@ public class FileReader {
 
     private List<Car> getNextSortedSkipLate(List<Ride> rides) {
         List<Car> bestCars = new ArrayList<>();
+        rides.sort(Comparator.comparing(Ride::getLatestFinish));
         rides.sort(Comparator.comparing(Ride::getEarliestStart));
         for (int j = 0; j < vehiclesCount ; j++) {
-            bestCars.add(new Car());
+            bestCars.add(new Car(bonusCount));
         }
 
         for(Ride ride : rides) {
@@ -127,7 +132,6 @@ public class FileReader {
                 avcar.addRide(ride);
             }
         }
-
         return bestCars;
     }
 
@@ -148,7 +152,7 @@ public class FileReader {
         }
 
         for (int j = 0; j < vehiclesCount ; j++) {
-            bestCars.add(new Car());
+            bestCars.add(new Car(bonusCount));
         }
         int removed = 0;
         for(Ride ride : ridesCopy) {
@@ -179,7 +183,7 @@ public class FileReader {
         for(int i = 0; i < 100000; i++) {
             List<Car> cars = new ArrayList<>();
             for (int j = 0; j < vehiclesCount ; j++) {
-                cars.add(new Car());
+                cars.add(new Car(bonusCount));
             }
 
             int score = 0;
@@ -190,7 +194,7 @@ public class FileReader {
                 }
             }
             for(Car car : cars) {
-                score += car.score(bonusCount);
+                score += car.getCurrentScore();
             }
             if(score > bestScore) {
                 System.out.println(score);
