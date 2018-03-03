@@ -5,6 +5,23 @@
 
 Check https://hashcode.withgoogle.com/past_editions.html
 
+## The Result
+**Scores**:
+
+| Input            | latest         | best           |
+|------------------|----------------|----------------|
+| a_example        | 4              | 10             |
+| b_should_be_easy | 176,877        | 176,877        |
+| c_no_hurry       | 12,456,428     | 13,086,527     |
+| d_metropolis     | 11,091,528     | 11,091,006     |
+| e_high_bonus     | 21,463,975     | 21,465,945     |
+| **Total**        | **45,188,812** | **45,820,365** |
+    
+**Rank**: 
+- 681 global
+- 56 Germany
+- 2 Hub
+
 ## The Ideas
 After creating the basic project structure, a FileReader and after a basic algorithm discussion we split into two teams and followed three approaches:
 
