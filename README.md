@@ -17,13 +17,13 @@ Check https://hashcode.withgoogle.com/past_editions.html
 | e_high_bonus     | 21,463,975     | 21,465,945     |
 | **Total**        | **45,188,812** | **45,820,365** |
     
-**Rank**: 
+**Ranks**: 
 - 681 global
 - 56 Germany
 - 2 Hub
 
 ## The Ideas
-After creating the basic project structure, a FileReader and after a basic algorithm discussion we split into two teams and followed three approaches:
+After creating the basic project structure, a FileReader and a basic algorithm discussion we split into two teams and followed three approaches:
 
 ### One
 - A weighted look-ahead algorithm on a departure-sorted ride set
@@ -36,14 +36,14 @@ After creating the basic project structure, a FileReader and after a basic algor
 - Sort the rides by earliest possible pick-up time
 - Simply distribute the rides to the cars in a dump loop
 
-The second approach were ready after a few minutes. Performance were as expected: Useless ~14Mln
+The second approach was ready after a few minutes. Performance were as expected: Useless - **~14Mln**
 
-Afterwards we could upload the first "real" contributions of the second approach and fought with a few bugs in the first algorighm
-The Score were somwhere around 38Mln
+Afterwards we could upload the first "real" contribution of the third approach and fight with a few bugs in the first algorighm.
+The Score were somewhere around **38Mln**
 
 ## The Optimization
-While first approach seemed to be the most promising we stuck somewhere and decided to go ahead.
-So For the last two hours we went full into the optimization of the second approach. 
+While the first approach seemed to be the most promising we kept stick somewhere and decided to try further.
+So For the last two hours we went full into the optimization of the third idea.
 
 ### Skip unreachable rides
 - before assigning a ride chech if you will get any points with any ride at all.
